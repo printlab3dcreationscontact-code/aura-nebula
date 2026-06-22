@@ -568,8 +568,14 @@ async function getFreePort(startingPort: number): Promise<number> {
 
 // Setup Vite Dev server or production static serving
 async function startServer() {
-  // Fine-tune port if it is occupied to prevent Address In Use errors
-  PORT = await getFreePort(3000);
+  // Use environment port if defined (e.g., Railway deployment)
+  if (process.env.PORT) {
+    PORT = parseInt(process.env.PORT, 10);
+    console.log(`Using environment port: ${PORT}`);
+  } else {
+    // Fine-tune port if it is occupied to prevent Address In Use errors
+    PORT = await getFreePort(3000);
+  }
   (global as any).AURA_PORT = PORT;
   
   if (process.env.NODE_ENV !== "production") {
