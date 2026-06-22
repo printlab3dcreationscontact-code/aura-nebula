@@ -7,6 +7,16 @@ let serverProcess = null;
 let mainWindow = null;
 let PORT = 3000;
 
+// =========================================================================
+// CONFIGURATION DU DÉPLOIEMENT HYBRIDE (RAILWAY)
+// =========================================================================
+// Rapprochez votre application de la perfection : si vous l'hébergez sur Railway, 
+// écrivez son URL ci-dessous (ex: "https://aura-nebula.up.railway.app").
+//
+// -> Tout changement poussé sur GitHub sera instantanément actif sur l'app de bureau de vos utilisateurs sans AUCUNE réinstallation requise !
+// -> Si laissé vide, l'application fonctionnera à 100% en mode local autonome.
+const RAILWAY_URL = "https://aura-nebula-production.up.railway.app"; 
+
 // Function to start the Express/Vite backend server directly in same thread
 function startBackendServer() {
   const isProd = app.isPackaged;
@@ -73,12 +83,19 @@ function createWindow() {
     }
   });
 
-  // Display a dark background loading state immediately
-  mainWindow.loadURL(`http://localhost:${PORT}`);
+  // Decide whether to load our live Railway URL or our offline Local Host fallback
+  const targetUrl = RAILWAY_URL ? RAILWAY_URL.replace(/\/$/, '') : `http://localhost:${PORT}`;
+  console.log(`[Electron-Main] Loading window content from target: ${targetUrl}`);
+  
+  mainWindow.loadURL(targetUrl);
 
   // Prevent external link clicks from loading inside our app view, open them in local Windows default browser instead!
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http://localhost') || url.startsWith('http://127.0.0.1')) {
+    const isAppUrl = url.startsWith('http://localhost') || 
+                     url.startsWith('http://127.0.0.1') || 
+                     (RAILWAY_URL && url.startsWith(RAILWAY_URL));
+                     
+    if (isAppUrl) {
       return { action: 'allow' };
     }
     // Open in standard windows default internet browser (like Chrome, Edge, etc.)
