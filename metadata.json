@@ -1,0 +1,6 @@
+{
+  "name": "Navigateur Web IA",
+  "description": "Un navigateur virtuel d'origine propulsé par Gemini 3.5-flash avec Grounding Search. Parcourez de vrais sites internet sans restriction de cadre, créez des résumés instantanés et dialoguez avec votre copilote IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

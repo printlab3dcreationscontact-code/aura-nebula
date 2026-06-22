@@ -1,0 +1,12 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+# Exclure les dossiers de build d'Electron
+dist/
+dist-desktop/
+node_modules/
